@@ -1,6 +1,7 @@
 package com.example.android.githubrestcalls;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,16 +15,14 @@ import java.util.List;
  */
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder>{
-    List<Projects> project = new ArrayList<>();
+    private static final String TAG = "";
+    List<Projects> projectList = new ArrayList<>();
 
     public RecyclerViewAdapter(List<Projects> project) {
-        this.project = project;
+        this.projectList = project;
     }
 
-    TextView name;
-    TextView id;
-    TextView updated;
-    TextView commits;
+
 
 
 
@@ -36,18 +35,19 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     @Override
     public void onBindViewHolder(RecyclerViewAdapter.ViewHolder holder, int position) {
-        Projects p = project.get(position);
-        name.setText(p.getName());
-        commits.setText(p.getCommits());
-        updated.setText(p.getUpdated());
-        id.setText(p.getID());
+        Projects p = projectList.get(position);
+        holder.name.setText("Name: "+p.getName());
+        holder.commits.setText("Commits: " +p.getCommits());
+        holder.updated.setText("Updated: " +p.getUpdated());
+        holder.id.setText("ID: " +p.getID());
+        Log.d(TAG, "onBindViewHolder: " + p.getName() + p.getCommits() + p.getID() + p.getUpdated());
 
 
     }
 
     @Override
     public int getItemCount() {
-        return project.size();
+        return projectList.size();
     }
 
 
@@ -55,6 +55,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
         private static final String TAG ="testing" ;
 
+        TextView name;
+        TextView id;
+        TextView updated;
+        TextView commits;
         public ViewHolder(View itemView) {
             super(itemView);
             name = (TextView) itemView.findViewById(R.id.tvRName);

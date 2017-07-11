@@ -21,7 +21,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class Repos extends AppCompatActivity {
 
     private static final String TAG = "hi";
-    private String site = "https://api.github.com/users/";
+    private String site = "https://api.github.com/";
     private String use;
     private RecyclerView recyclerView;
     private RecyclerView.LayoutManager layoutManager;
@@ -37,6 +37,9 @@ public class Repos extends AppCompatActivity {
         Intent i = getIntent();
         use = i.getStringExtra("need");
         Log.d(TAG, "onCreate: " + use);
+        recyclerView = (RecyclerView) findViewById(R.id.menu);
+
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(site)
@@ -45,7 +48,8 @@ public class Repos extends AppCompatActivity {
 
 
 
-
+        layoutManager = new LinearLayoutManager(this);
+        defaultItemAnimator = new DefaultItemAnimator();
         GithubService githubService = retrofit.create(GithubService.class);
         retrofit2.Call<List<Repositories>> callToGetRepos = githubService.callProfle(use);
 
@@ -55,10 +59,18 @@ public class Repos extends AppCompatActivity {
 
 
                 for (int i = 0; i < 5; i++) {
-                  //  Log.d(TAG, "onResponse: " + response.body().get(i).getName() ) ;
+                    Log.d(TAG, "onResponse: " + response.body().get(i).getName() ) ;
                     projects.add(new Projects(response.body().get(i).getName(), "" +response.body().get(i).getId() , response.body().get(i).getCommitsUrl(), response.body().get(i).getUpdatedAt()));
 
                 }
+
+                adapt = new RecyclerViewAdapter(projects);
+
+
+
+                recyclerView.setLayoutManager(layoutManager);
+                recyclerView.setItemAnimator(defaultItemAnimator);
+                recyclerView.setAdapter(adapt);
 
             }
 
@@ -68,15 +80,8 @@ public class Repos extends AppCompatActivity {
             }
         });
 
-        layoutManager = new LinearLayoutManager(this);
-        defaultItemAnimator = new DefaultItemAnimator();
-        adapt = new RecyclerViewAdapter(projects);
 
 
-
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(defaultItemAnimator);
-        recyclerView.setAdapter(adapt);
 
 
 
